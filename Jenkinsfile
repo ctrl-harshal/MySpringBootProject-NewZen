@@ -11,25 +11,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('MySpringBootProject-NewZen') {
-                    sh 'mvn clean package -DskipTests'
-                }
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                dir('MySpringBootProject-NewZen') {
-                    sh 'mvn test'
-                }
+                sh 'mvn test'
             }
         }
 
         stage('Docker Build') {
             steps {
-                dir('MySpringBootProject-NewZen') {
-                    sh 'docker build -t MySpringBootProject-NewZen:latest .'
-                }
+                sh 'docker build -t MySpringBootProject-NewZen:latest .'
             }
         }
 
@@ -52,8 +46,7 @@ pipeline {
                     sleep 15
 
                     echo "Container status:"
-                    docker ps -a --filter "name=MySpringBootProject-NewZen
-"
+                    docker ps -a --filter "name=MySpringBootProject-NewZen"
 
                     if [ "$(docker inspect -f '{{.State.Running}}' MySpringBootProject-NewZen)" != "true" ]; then
                         echo "Container failed to start!"

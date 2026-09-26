@@ -23,7 +23,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t MySpringBootProject-NewZen:latest .'
+                sh 'docker build -t myspringbootproject-newzen:latest .'
             }
         }
 

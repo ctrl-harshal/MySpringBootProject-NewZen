@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('cilm-service') {
+                dir('MySpringBootProject-NewZen') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('cilm-service') {
+                dir('MySpringBootProject-NewZen') {
                     sh 'mvn test'
                 }
             }
@@ -27,8 +27,8 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                dir('cilm-service') {
-                    sh 'docker build -t cilm-service:latest .'
+                dir('MySpringBootProject-NewZen') {
+                    sh 'docker build -t MySpringBootProject-NewZen:latest .'
                 }
             }
         }
@@ -36,28 +36,29 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    docker stop cilm-service || true
-                    docker rm cilm-service || true
+                    docker stop MySpringBootProject-NewZen || true
+                    docker rm MySpringBootProject-NewZen || true
 
                     docker run -d \
-                      --name cilm-service \
+                      --name MySpringBootProject-NewZen \
                       --add-host=host.docker.internal:host-gateway \
-                      -p 8081:8081 \
-                      -e DB_URL="jdbc:mysql://host.docker.internal:3306/cilm" \
-                      -e DB_USERNAME="cilm_root" \
+                      -p 8081:8080 \
+                      -e DB_URL="jdbc:mysql://host.docker.internal:3306/test" \
+                      -e DB_USERNAME="root" \
                       -e DB_PASSWORD="root" \
-                      cilm-service:latest
+                      MySpringBootProject-NewZen:latest
 
                     echo "Waiting for application to start..."
                     sleep 15
 
                     echo "Container status:"
-                    docker ps -a --filter "name=cilm-service"
+                    docker ps -a --filter "name=MySpringBootProject-NewZen
+"
 
-                    if [ "$(docker inspect -f '{{.State.Running}}' cilm-service)" != "true" ]; then
+                    if [ "$(docker inspect -f '{{.State.Running}}' MySpringBootProject-NewZen)" != "true" ]; then
                         echo "Container failed to start!"
                         echo "Container logs:"
-                        docker logs cilm-service
+                        docker logs MySpringBootProject-NewZen
                         exit 1
                     fi
 

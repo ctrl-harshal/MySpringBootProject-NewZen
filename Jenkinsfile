@@ -30,28 +30,28 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    docker stop MySpringBootProject-NewZen || true
-                    docker rm MySpringBootProject-NewZen || true
+                    docker stop myspringbootproject-newzen || true
+                    docker rm myspringbootproject-newzen || true
 
                     docker run -d \
-                      --name MySpringBootProject-NewZen \
+                      --name myspringbootproject-newzen \
                       --add-host=host.docker.internal:host-gateway \
                       -p 8081:8081 \
                       -e DB_URL="jdbc:mysql://host.docker.internal:3306/test" \
                       -e DB_USERNAME="root" \
                       -e DB_PASSWORD="root" \
-                      MySpringBootProject-NewZen:latest
+                      myspringbootproject-newzen:latest
 
                     echo "Waiting for application to start..."
                     sleep 15
 
                     echo "Container status:"
-                    docker ps -a --filter "name=MySpringBootProject-NewZen"
+                    docker ps -a --filter "name=myspringbootproject-newzen"
 
-                    if [ "$(docker inspect -f '{{.State.Running}}' MySpringBootProject-NewZen)" != "true" ]; then
+                    if [ "$(docker inspect -f '{{.State.Running}}' myspringbootproject-newzen)" != "true" ]; then
                         echo "Container failed to start!"
                         echo "Container logs:"
-                        docker logs MySpringBootProject-NewZen
+                        docker logs myspringbootproject-newzen
                         exit 1
                     fi
 

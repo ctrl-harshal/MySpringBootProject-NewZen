@@ -36,7 +36,7 @@ pipeline {
                     docker run -d \
                       --name MySpringBootProject-NewZen \
                       --add-host=host.docker.internal:host-gateway \
-                      -p 8081:8080 \
+                      -p 8081:8081 \
                       -e DB_URL="jdbc:mysql://host.docker.internal:3306/test" \
                       -e DB_USERNAME="root" \
                       -e DB_PASSWORD="root" \
